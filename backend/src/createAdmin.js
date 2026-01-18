@@ -1,11 +1,12 @@
 require("dotenv").config();
 
+const bcrypt = require("bcrypt");
 const { Admin } = require("./models");
 
 async function createAdmin() {
   try {
     const username = "admin";
-    const password = "12345";
+    const password = bcrypt.hashSync("12345", 10);
 
     await Admin.upsert({ username, password });
 
