@@ -1,15 +1,11 @@
-// backend/src/database.js
 const { Sequelize } = require("sequelize");
+require("dotenv").config({
+  path: process.env.NODE_ENV === "production" ? ".env.production" : ".env",
+});
 
-const sequelize = new Sequelize(
-  "hms_db",          // database name
-  "postgres",        // username
-  "postgres123",     // password
-  {
-    host: "localhost",
-    dialect: "postgres",
-    logging: false,
-  }
-);
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: "postgres",
+  logging: false,
+});
 
 module.exports = sequelize;
