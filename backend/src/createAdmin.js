@@ -1,7 +1,8 @@
 require("dotenv").config();
 
 const bcrypt = require("bcrypt");
-const { Admin } = require("./models");
+const db = require("./models");
+const Admin = db.Admin;
 
 async function createAdmin() {
   try {
