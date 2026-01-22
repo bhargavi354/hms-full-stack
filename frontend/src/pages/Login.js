@@ -5,33 +5,48 @@ import "./Login.css";
 
 export default function Login() {
   const navigate = useNavigate();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    if (!username || !password) {
+      alert("Please enter username and password");
+      return;
+    }
+
     try {
-      const res = await fetch(`${API_BASE}/api/login`, {
+      setLoading(true);
+
+      // 🔥 IMPORTANT FIX: DO NOT ADD /api AGAIN
+      const res = await fetch(`${API_BASE}/login`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ username, password }),
       });
 
       const data = await res.json();
 
-      if (!res.ok) {
+      if (!res.ok || !data.success) {
         alert(data.message || "Invalid admin credentials");
+        setLoading(false);
         return;
       }
 
-      // save login flag
+      // Save login state
       localStorage.setItem("hms_logged_in", "true");
 
-      navigate("/");
-    } catch (error) {
-      console.error("Login error:", error);
-      alert("Server error");
+      navigate("/"); // go to dashboard
+    } catch (err) {
+      console.error("Login error:", err);
+      alert("Server error. Backend not reachable.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -46,6 +61,7 @@ export default function Login() {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            required
           />
 
           <label>Password</label>
@@ -53,10 +69,11 @@ export default function Login() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
 
-          <button type="submit" className="login-btn">
-            Log In
+          <button type="submit" className="login-btn" disabled={loading}>
+            {loading ? "Logging in..." : "Log In"}
           </button>
         </form>
 
