@@ -1,7 +1,8 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const router = express.Router();
-const { Admin } = require("../models");
+const db = require("../models");
+const Admin = db.Admin;
 
 router.post("/", async (req, res) => {
   try {
