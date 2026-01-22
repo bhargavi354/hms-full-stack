@@ -7,22 +7,27 @@ router.post("/", async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    const admin = await Admin.findOne({
-      where: { username: username.trim() },
-    });
+    let admin = await Admin.findOne({ where: { username } });
 
+    // 🔥 If no admin exists, auto create default admin
     if (!admin) {
-      return res.status(401).json({ message: "Invalid admin credentials" });
+      const hash = await bcrypt.hash("12345", 10);
+      admin = await Admin.create({
+        username: "admin",
+        password: hash,
+      });
+      console.log("Admin auto created in DB");
     }
 
-    const isMatch = await bcrypt.compare(password, admin.password);
+    const match = await bcrypt.compare(password, admin.password);
 
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid admin credentials" });
+    if (!match) {
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    res.json({ success: true, message: "Login successful" });
+    res.json({ success: true });
   } catch (err) {
+    console.error("LOGIN ERROR:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
