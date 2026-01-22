@@ -1,4 +1,4 @@
-const { Sequelize } = require("sequelize");
+const { Sequelize, DataTypes } = require("sequelize");
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
@@ -17,25 +17,19 @@ const sequelize = new Sequelize(databaseUrl, {
   },
 });
 
-// Import models
-const Admin = require("./admin")(sequelize);
-const Employee = require("./employee")(sequelize);
-const Patient = require("./patient")(sequelize);
-const Attendance = require("./attendance")(sequelize);
-const Revenue = require("./revenue")(sequelize);
-const HomeVisit = require("./homeVisit")(sequelize);
-const OpBooking = require("./OpBooking")(sequelize);
-const OpInvoice = require("./OpInvoice")(sequelize);
+const db = {};
 
-// Export everything
-module.exports = {
-  sequelize,
-  Admin,
-  Employee,
-  Patient,
-  Attendance,
-  Revenue,
-  HomeVisit,
-  OpBooking,
-  OpInvoice,
-};
+db.sequelize = sequelize;
+
+// Load all models WITH DataTypes
+db.Admin = require("./admin")(sequelize, DataTypes);
+db.Employee = require("./employee")(sequelize, DataTypes);
+db.Patient = require("./patient")(sequelize, DataTypes);
+db.Attendance = require("./attendance")(sequelize, DataTypes);
+db.Revenue = require("./revenue")(sequelize, DataTypes);
+db.HomeVisit = require("./homeVisit")(sequelize, DataTypes);
+db.OpBooking = require("./OpBooking")(sequelize, DataTypes);
+db.OpInvoice = require("./OpInvoice")(sequelize, DataTypes);
+db.Settings = require("./setting")(sequelize, DataTypes);
+
+module.exports = db;
