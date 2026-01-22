@@ -1,6 +1,11 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { Sequelize } = require("sequelize");
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
+const databaseUrl = process.env.DATABASE_URL;
+if (!databaseUrl) {
+  throw new Error("DATABASE_URL is not set");
+}
+
+const sequelize = new Sequelize(databaseUrl, {
   dialect: "postgres",
   protocol: "postgres",
   logging: false,
@@ -12,17 +17,17 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
   },
 });
 
-// Load models
-const Admin = require("./admin")(sequelize, DataTypes);
-const Employee = require("./employee")(sequelize, DataTypes);
-const Patient = require("./patient")(sequelize, DataTypes);
-const Attendance = require("./attendance")(sequelize, DataTypes);
-const Revenue = require("./revenue")(sequelize, DataTypes);
-const OpBooking = require("./OpBooking")(sequelize, DataTypes);
-const OpInvoice = require("./OpInvoice")(sequelize, DataTypes);
-const Settings = require("./setting")(sequelize, DataTypes);
+// Import models
+const Admin = require("./admin")(sequelize);
+const Employee = require("./employee")(sequelize);
+const Patient = require("./patient")(sequelize);
+const Attendance = require("./attendance")(sequelize);
+const Revenue = require("./revenue")(sequelize);
+const HomeVisit = require("./homeVisit")(sequelize);
+const OpBooking = require("./OpBooking")(sequelize);
+const OpInvoice = require("./OpInvoice")(sequelize);
 
-// Export all
+// Export everything
 module.exports = {
   sequelize,
   Admin,
@@ -30,7 +35,7 @@ module.exports = {
   Patient,
   Attendance,
   Revenue,
+  HomeVisit,
   OpBooking,
   OpInvoice,
-  Settings,
 };
