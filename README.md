@@ -116,3 +116,30 @@ Bhargavi Aakarapu
 - Dashboard Analytics
 - Docker Deployment
 - Email Notifications
+- ---
+
+# 📸 Project Screenshots
+
+## Dashboard
+![Dashboard](dashboard.png)
+
+## Patients Module
+![Patients](patients.png)
+
+## Attendance Module
+![Attendance](attendence.png)
+
+## Home Visit Module
+![Home Visit](homevisit.png)
+
+## Revenue Module
+![Revenue](Revenue.png)
+
+## Employees Module
+![Employees](Employees.png)
+
+## Settings Module
+![Settings](settings.png)
+
+## OP Booking Module
+![OP Booking](opBooking.png)
